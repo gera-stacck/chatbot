@@ -1,0 +1,7 @@
+Flask==3.0.3
+Werkzeug==3.1.2
+flask-Cors
+insightface==0.7.3
+mysql-connector-python==9.1.0
+bcrypt>=4.2.1
+onnxruntime
