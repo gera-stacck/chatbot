@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="registro-container">
+        <h1>Por favor, proporciona tus datos:</h1>
+        <form action="/registrar" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" required>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" name="telefono" required>
+
+            <label for="correo">Correo:</label>
+            <input type="email" name="correo" required>
+
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+</body>
+</html>

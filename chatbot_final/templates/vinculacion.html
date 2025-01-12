@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Datos - Visualización</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style2.css') }}">
+</head>
+<body>
+    <div class="tabs">
+        <button class="tab-button" onclick="showTab('asignaciones')">Asignaciones</button>
+        <button class="tab-button" onclick="showTab('interacciones')">Interacciones</button>
+        <button class="tab-button" onclick="showTab('seguimiento')">Seguimiento</button>
+        <button class="tab-button" onclick="showTab('inscripciones')">Inscripciones</button>
+        <a href="/logout" style="background-color: white; color: #007bff; text-decoration: none; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: inline-block;">Cerrar Sesión</a>
+    </div>
+
+    <div id="asignaciones" class="tab-content">
+        <h2>Asignaciones</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Asignacion ID</th>
+                    <th>Cliente ID</th>
+                    <th>Fecha de Registro</th>
+                    <th>Nombre del Cliente</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="interacciones" class="tab-content hidden">
+        <h2>Interacciones</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Cliente</th>
+                    <th>Nombre Cliente</th>
+                    <th>ID Interacción</th>
+                    <th>Mensaje Usuario</th>
+                    <th>Respuesta Chatbot</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="seguimiento" class="tab-content hidden">
+        <h2>Seguimiento</h2>
+
+        <!-- Formulario para insertar datos -->
+        <h3>Registrar Interacción</h3>
+        <form id="seguimiento-form">
+            <label for="cliente_id">ID Cliente:</label>
+            <input type="number" id="cliente_id" name="cliente_id" required><br>
+
+            <label for="tipo_interaccion">Tipo de Interacción:</label>
+            <select id="tipo_interaccion" name="tipo_interaccion" required>
+                <option value="llamada">Llamada</option>
+                <option value="correo">Correo</option>
+                <option value="mensaje_texto">Mensaje de Texto</option>
+            </select><br>
+
+            <label for="resultado">Resultado:</label>
+            <select id="resultado" name="resultado" required>
+                <option value="respondido">Respondido</option>
+                <option value="no_respondido">No Respondido</option>
+                <option value="rechazado">Rechazado</option>
+            </select><br>
+
+            <button type="submit">Registrar</button>
+        </form>
+
+        <h3>Interacciones Registradas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Asignación</th>
+                    <th>ID Cliente</th>
+                    <th>Nombre Cliente</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Tipo Interacción</th>
+                    <th>Cantidad de Interacciones</th>
+                    <th>Resultado</th>
+                    <th>Viabilidad</th>
+                    <th>Fecha Asignación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Sección de Inscripciones -->
+    <div id="inscripciones" class="tab-content hidden">
+        <h2>Inscripciones</h2>
+
+        <!-- Formulario de Inscripción -->
+        <h3>Registrar Nueva Inscripción</h3>
+        <form id="inscripcion-form">
+            <label for="cliente_id">ID Cliente:</label>
+            <input type="number" id="cliente_id_inscripcion" name="cliente_id" required><br>
+
+            <label for="curso">Curso:</label>
+            <input type="text" id="curso" name="curso" required><br>
+
+            <label for="fecha_inscripcion">Fecha de Inscripción:</label>
+            <input type="date" id="fecha_inscripcion" name="fecha_inscripcion" required><br>
+
+            <label for="identificacion_oficial_pdf">Identificación Oficial (PDF):</label>
+            <input type="file" id="identificacion_oficial_pdf" name="identificacion_oficial_pdf" accept="application/pdf" required><br>
+
+            <label for="comprobante_domicilio_pdf">Comprobante de Domicilio (PDF):</label>
+            <input type="file" id="comprobante_domicilio_pdf" name="comprobante_domicilio_pdf" accept="application/pdf" required><br>
+
+            <label for="comprobante_pago_pdf">Comprobante de Pago (Opcional):</label>
+            <input type="file" id="comprobante_pago_pdf" name="comprobante_pago_pdf" accept="application/pdf"><br>
+
+            <button type="submit">Registrar Inscripción</button>
+        </form>
+
+        <!-- Formulario para Actualizar Cliente -->
+        <h3>Actualizar Datos del Cliente Inscrito</h3>
+        <form id="actualizar-cliente-form">
+            <label for="cliente_id_actualizar">ID Cliente:</label>
+            <input type="number" id="cliente_id_actualizar" name="cliente_id_actualizar" required><br>
+            <label for="cliente_id_actualizar">ID Inscripcion:</label>
+            <input type="number" id="inscripcion_id_actualizar" name="inscripcion_id_actualizar" required><br>
+
+            <label for="nuevo_correo">Agregar Comprobante de pago:</label>
+            <input type="file" id="comprobante_pago_pdf" name="comprobante_pago_pdf" accept="application/pdf"><br>
+
+            <button type="submit">Actualizar Cliente</button>
+        </form>
+
+        <!-- Tabla de Inscripciones -->
+        <h3>Inscripciones Registradas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Inscripción</th>
+                    <th>Cliente ID</th>
+                    <th>Curso</th>
+                    <th>Fecha Inscripción</th>
+                    <th>Identificación Oficial</th>
+                    <th>Comprobante Domicilio</th>
+                    <th>Comprobante Pago</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        // Función para manejar el envío del formulario
+        document.getElementById('seguimiento-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const cliente_id = document.getElementById('cliente_id').value;
+            const tipo_interaccion = document.getElementById('tipo_interaccion').value;
+            const resultado = document.getElementById('resultado').value;
+
+            fetch('/seguimiento', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cliente_id, tipo_interaccion, resultado })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Interacción registrada:', data);
+                alert('Interacción registrada exitosamente!');
+                showTab('seguimiento');  // Volver a la pestaña de seguimiento
+            })
+            .catch(error => {
+                console.error('Error al registrar interacción:', error);
+                alert('Hubo un error al registrar la interacción.');
+            });
+        });
+
+        document.getElementById('inscripcion-form').addEventListener('submit', function(e) {
+            e.preventDefault();  // Prevenir el comportamiento por defecto del formulario
+
+            // Crear un nuevo objeto FormData con los datos del formulario
+            var formData = new FormData(this);
+
+            // Hacer la solicitud POST al servidor Flask
+            fetch('/inscripcion', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.mensaje) {
+                    alert(data.mensaje);  // Mostrar mensaje de éxito
+                } else if (data.error) {
+                    alert(data.error);  // Mostrar error
+                }
+            })
+            .catch(error => {
+                console.error('Error al enviar los datos:', error);
+                alert('Ocurrió un error al enviar los datos');
+            });
+        });
+        
+        document.getElementById("actualizar-cliente-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevenir el comportamiento predeterminado de enviar el formulario
+
+            var formData = new FormData(this);
+            formData.append("cliente_id", document.getElementById("cliente_id_actualizar").value);
+            formData.append("inscripcion_id", document.getElementById("inscripcion_id_actualizar").value);
+            //formData.append("comprobante_pago_pdf", document.getElementById("comprobante_pago_pdf").files[0]);
+
+            fetch("/actualizar_comprobante_pago", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);  // Muestra el mensaje de éxito
+                } else {
+                    alert(data.error);  // Muestra el mensaje de error
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Ocurrió un error al actualizar el comprobante de pago.");
+            });
+        });
+
+
+
+        // Función para obtener y mostrar las interacciones registradas
+        const endpoints = {
+            'asignaciones': '/asignaciones',
+            'interacciones': '/interacciones',
+            'seguimiento': '/seguimiento',
+            'inscripciones': '/inscripciones'
+        };
+
+        for (const [tabId, url] of Object.entries(endpoints)) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector(`#${tabId} tbody`);
+                    tbody.innerHTML = data.map(row => {
+                        return `<tr>${Object.values(row).map(value => `<td>${value}</td>`).join('')}</tr>`;
+                    }).join('');
+                })
+                .catch(error => console.error(`Error fetching ${tabId}:`, error));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Instituto de Inglés IBIM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        // Función para abrir y cerrar la ventana del chatbot
+        function toggleChatbot() {
+            var chatbotWindow = document.getElementById("chatbot-window");
+            chatbotWindow.classList.toggle("active");
+        }
+
+        // Prevenir el cierre de la ventana al enviar el formulario
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevenir el envío del formulario
+
+            var userInput = document.querySelector('input[name="user_input"]').value;
+
+            // Realizar la petición AJAX para enviar el mensaje al servidor
+            var formData = new FormData();
+            formData.append("user_input", userInput);
+
+            fetch("/chat", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Mostrar la respuesta del chatbot
+                document.getElementById('chat-response').innerHTML = data.respuesta;
+                
+                // Limpiar el campo de entrada
+                document.querySelector('input[name="user_input"]').value = '';
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav style="background-color: #007bff; color: white; display: flex; justify-content: space-between; padding: 10px 20px; align-items: center;">
+            <div style="font-size: 24px; font-weight: bold;">Instituto de Inglés IBIM</div>
+            <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 20px;">
+                <li><a href="#inicio" style="color: white; text-decoration: none;">Inicio</a></li>
+                <li><a href="#oferta" style="color: white; text-decoration: none;">Oferta Académica</a></li>
+                <li><a href="#registro" style="color: white; text-decoration: none;">Registro de Admisión</a></li>
+                <li><a href="#servicios" style="color: white; text-decoration: none;">Servicios</a></li>
+            </ul>
+            <a href="/login" style="background-color: white; color: #007bff; text-decoration: none; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: inline-block;">Iniciar Sesión</a>
+        </nav>
+    </header>
+
+    <!-- Botón emergente para el chatbot -->
+    <button id="chatbot-button" onclick="toggleChatbot()">Chat con nosotros</button>
+
+    <!-- Ventana emergente del chatbot -->
+    <div id="chatbot-window" class="chatbot-window">
+        <div class="chatbot-header">
+            <span>Chat con nosotros</span>
+            <button onclick="toggleChatbot()" class="close-btn">X</button>
+        </div>
+        <div class="chat-container">
+            <div id="chat-response">
+                {% if respuesta %}
+                    <p>{{ respuesta|safe }}</p> <!-- Mostrar respuesta del chatbot -->
+                {% endif %}
+            </div>
+
+          
+
+            <form id="chat-form" onsubmit="handleSubmit(event)">
+                <input type="text" name="user_input" required placeholder="Escribe tu mensaje...">
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Secciones de contenido -->
+    <section id="inicio" style="padding: 50px; background-color: #f4f4f4;">
+        <h1>Bienvenido al Instituto de Inglés IBIM</h1>
+        <p>Tu camino al éxito comienza aquí.</p>
+    </section>
+
+    <section id="oferta" style="padding: 50px;">
+        <h2>Oferta Académica</h2>
+        <p>Descubre nuestros programas diseñados para todos los niveles.</p>
+    </section>
+
+    <section id="registro" style="padding: 50px; background-color: #f4f4f4;">
+        <h2>Registro de Admisión</h2>
+        <p>Forma parte de nuestra comunidad. ¡Regístrate ahora!</p>
+    </section>
+
+    <section id="servicios" style="padding: 50px;">
+        <h2>Servicios</h2>
+        <p>Conoce todos los servicios que ofrecemos para mejorar tu aprendizaje.</p>
+    </section>
+</body>
+</html>

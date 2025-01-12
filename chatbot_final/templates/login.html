@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_login.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Inicio de sesión</h2>
+        <form id="loginForm">
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" name="correo" required placeholder="Ingrese su correo">
+            
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="contrasena" name="contrasena" required placeholder="Ingrese su contraseña">
+            
+            <button type="submit">Iniciar sesión</button>
+        </form>
+        <div id="error-message" style="color: red; display: none;">Credenciales inválidas o faltan campos obligatorios.</div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const correo = document.getElementById('correo').value;
+            const contrasena = document.getElementById('contrasena').value;
+
+            const data = { correo, contrasena };
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('error-message').style.display = 'block';
+                } else {
+                    // Redireccionar según el rol
+                    if (data.rol === 'vinculacion') {
+                        window.location.href = '/vinculacion';
+                    } else if (data.rol === 'administrador') {
+                        window.location.href = '/administrador';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
